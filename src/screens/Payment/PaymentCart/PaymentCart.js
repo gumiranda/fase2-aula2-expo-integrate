@@ -3,12 +3,12 @@ import CryptoJS from 'react-native-crypto-js';
 import {CreditCardInput} from 'react-native-credit-card-input';
 import {Alert} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
+import generateCardHash from 'react-native-pagarme-card-hash';
 import api from '../../../services/api';
 import {completeProfileRequest} from '../../../appStore/appModules/user/actions';
 import {getRequest} from '../../../appStore/appModules/creditcard/list';
 import {Container, SubmitButton, Title} from './styles';
 import Background from '../../../components/Background/Background';
-import generateCardHash from 'react-native-pagarme-card-hash';
 
 export default function PaymentCart({navigation}) {
   const dispatch = useDispatch();
@@ -32,6 +32,7 @@ export default function PaymentCart({navigation}) {
         card_holder_name: cart.name,
         card_cvv: cart.cvc,
       });
+
       const cardHash = await generateCardHash(
         {
           number: numbercart,
@@ -41,6 +42,7 @@ export default function PaymentCart({navigation}) {
         },
         'chavePAGARME',
       );
+      console.log('CARD HASH', cardHash);
       // const card_hash = CryptoJS.AES.encrypt(
       //   objToEncrypt,
       //   'hdfudhuidfhudhudah9d8s8f9d8a98as9d8s9d89as',
@@ -73,6 +75,7 @@ export default function PaymentCart({navigation}) {
         if (count === 0) {
           setLoading(true);
           const response = await api.post('transaction', obj);
+          console.log(response);
           if (response.data) {
             dispatch(getRequest());
             dispatch(completeProfileRequest({cpf, phone}));

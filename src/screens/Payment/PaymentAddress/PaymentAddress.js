@@ -43,52 +43,48 @@ export default function PaymentAddress({navigation}) {
 
   const onSubmit = async (values, isValid) => {
     if (isValid) {
-      if (new Date(profile.payDay).getTime() > new Date().getTime()) {
-        Alert.alert('Erro', 'Sua assinatura já está paga');
-navigation.navigate('Home');      } else {
-        const {
-          zipcode,
-          state,
-          street,
-          city,
-          neighborhood,
-          street_number,
-          complemento,
-        } = values;
-        if (profile.cpf && profile.phone) {
-          if (
-            initialValues.zipcode === zipcode ||
-            initialValues.state === state ||
-            initialValues.street === street ||
-            initialValues.city === city ||
-            initialValues.street_number === street_number ||
-            initialValues.neighborhood === neighborhood ||
-            initialValues.complemento === complemento
-          ) {
-            Alert.alert(
-              'Erro',
-              'Preencha os valores corretamente para prosseguir',
-            );
-          } else {
-            const value = navigation.getParam('value');
-            navigation.push('PaymentCart', {
-              zipcode,
-              state,
-              street,
-              city,
-              neighborhood,
-              street_number,
-              complemento,
-              value,
-            });
-          }
-        } else {
+      const {
+        zipcode,
+        state,
+        street,
+        city,
+        neighborhood,
+        street_number,
+        complemento,
+      } = values;
+      if (profile.cpf && profile.phone) {
+        if (
+          initialValues.zipcode === zipcode ||
+          initialValues.state === state ||
+          initialValues.street === street ||
+          initialValues.city === city ||
+          initialValues.street_number === street_number ||
+          initialValues.neighborhood === neighborhood ||
+          initialValues.complemento === complemento
+        ) {
           Alert.alert(
             'Erro',
-            'Antes de prosseguir é necessário completar o cadastro',
+            'Preencha os valores corretamente para prosseguir',
           );
-          navigation.navigate('CompleteRegister');
+        } else {
+          const value = navigation.getParam('value');
+          navigation.push('PaymentCart', {
+            zipcode,
+            state,
+            street,
+            city,
+            neighborhood,
+            street_number,
+            complemento,
+            value,
+          });
         }
+      } else {
+        Alert.alert(
+          'Erro',
+          'Antes de prosseguir é necessário completar o cadastro',
+        );
+        navigation.navigate('CompleteRegister');
       }
     }
   };
